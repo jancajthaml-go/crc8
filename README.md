@@ -6,7 +6,7 @@ CRC which encode messages by adding a fixed-length check value, for the purpose 
 
 However, it is not suitable for protection against intentional alteration of data.
 
-Implementation is tableless with variable 16bit polynomial.
+Implementation is tableless with variable 8bit polynomial.
 
 ### Performance ###
 
