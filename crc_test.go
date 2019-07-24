@@ -22,11 +22,70 @@ func TestNormalized(t *testing.T) {
 
 	input := []byte("abcdefgh")
 
-	t.Log("CRC-8")
+	t.Log("CRC8")
 	{
 		AssetEqual(t, 0xCB, Checksum(input, 0x07, 0x00, 0x00))
 	}
 
+	t.Log("CRC8_SAE_J1850")
+	{
+		AssetEqual(t, 0xD7, Checksum(input, 0x1D, 0xFF, 0xFF))
+	}
+
+	t.Log("CRC8_SAE_J1850_ZERO")
+	{
+		AssetEqual(t, 0x3E, Checksum(input, 0x1D, 0x00, 0x00))
+	}
+
+	t.Log("CRC8_8H2F")
+	{
+		AssetEqual(t, 0x54, Checksum(input, 0x2F, 0xFF, 0xFF))
+	}
+
+	t.Log("CRC8_CDMA2000")
+	{
+		AssetEqual(t, 0xF7, Checksum(input, 0x9B, 0xFF, 0x00))
+	}
+
+	//t.Log("CRC8_DARC")
+	//{
+	//AssetEqual(t, 0x62, Checksum(input, 0x39, 0x00, 0x00, true, true))
+	//}
+
+	t.Log("CRC8_DVB_S2")
+	{
+		AssetEqual(t, 0x62, Checksum(input, 0xD5, 0x00, 0x00))
+	}
+
+	//t.Log("CRC8_EBU")
+	//{
+	//AssetEqual(t, 0x41, Checksum(input, 0x1D, 0xFF, 0x00, true, true))
+	//}
+
+	t.Log("CRC8_ICODE")
+	{
+		AssetEqual(t, 0x96, Checksum(input, 0x1D, 0XFD, 0x00))
+	}
+
+	t.Log("CRC8_ITU")
+	{
+		AssetEqual(t, 0x9E, Checksum(input, 0x7, 0X00, 0x55))
+	}
+
+	//t.Log("CRC8_MAXIM")
+	//{
+	//AssetEqual(t, 0x92, Checksum(input, 0x31, 0X00, 0x00, true, true))
+	//}
+
+	//t.Log("CRC8_ROHC")
+	//{
+	//AssetEqual(t, 0x15, Checksum(input, 0x7, 0XFF, 0x0))
+	//}
+
+	//t.Log("CRC8_ITU")
+	//{
+	//AssetEqual(t, 0x3D, Checksum(input, 0x9B, 0X00, 0x00))
+	//}
 }
 
 func BenchmarkCrcSmall(b *testing.B) {
