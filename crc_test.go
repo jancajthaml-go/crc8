@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-var largeText = []byte(strings.Repeat("a", 50000))
+var largeText = []byte(strings.Repeat("a", 500000))
 var smallText = []byte(strings.Repeat("a", 5))
 
 func AssetEqual(t *testing.T, expected uint8, actual uint8) {
@@ -18,7 +18,18 @@ func TestCrc8EmptyVector(t *testing.T) {
 	AssetEqual(t, 0x00, Checksum(nil, 0x07, 0x00, 0x00))
 }
 
-func TestNormalized(t *testing.T) {
+func TestPrecalculatedNormalized(t *testing.T) {
+	input := []byte("abcdefgh")
+
+	t.Log("CRC8/CRC-8")
+	{
+		c := New(0x07, 0x00, 0x00)
+		AssetEqual(t, 0xCB, c.Checksum(input))
+	}
+
+}
+
+func TestGenericNormalized(t *testing.T) {
 
 	input := []byte("abcdefgh")
 
@@ -86,6 +97,24 @@ func TestNormalized(t *testing.T) {
 	//{
 	//AssetEqual(t, 0x3D, Checksum(input, 0x9B, 0X00, 0x00))
 	//}
+}
+
+func BenchmarkPrecalculatedCrcSmall(b *testing.B) {
+	c := New(0x07, 0x00, 0x00)
+	b.ResetTimer()
+	b.SetBytes(int64(len(smallText)))
+	for n := 0; n < b.N; n++ {
+		c.Checksum(smallText)
+	}
+}
+
+func BenchmarkPrecalculatedCrcLarge(b *testing.B) {
+	c := New(0x07, 0x00, 0x00)
+	b.ResetTimer()
+	b.SetBytes(int64(len(largeText)))
+	for n := 0; n < b.N; n++ {
+		c.Checksum(largeText)
+	}
 }
 
 func BenchmarkCrcSmall(b *testing.B) {
