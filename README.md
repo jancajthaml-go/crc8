@@ -6,13 +6,15 @@ CRC which encode messages by adding a fixed-length check value, for the purpose 
 
 However, it is not suitable for protection against intentional alteration of data.
 
-Implementation is tableless with variable 8bit polynomial.
+Implementation provides both tableless and tabular checksum functions with variable 8bit polynomial.
 
 ### Performance ###
 
 ```
-BenchmarkCrcSmall  58.47 MB/s  0 B/op  0 allocs/op
-BenchmarkCrcLarge  47.11 MB/s  0 B/op  0 allocs/op
+BenchmarkPrecalculatedCrcSmall  611.83 MB/s  0 B/op  0 allocs/op
+BenchmarkPrecalculatedCrcLarge  439.44 MB/s  0 B/op  0 allocs/op
+BenchmarkCrcSmall               60.11 MB/s   0 B/op  0 allocs/op
+BenchmarkCrcLarge               47.04 MB/s   0 B/op  0 allocs/op
 ```
 
 ### Usage ###
@@ -25,5 +27,10 @@ poly := 0x07
 init := 0x00
 xorout := 0x00
 
+// for tableless
 crc8.Checksum(data, poly, init, xorout) // 0xCB
+
+// for tabular
+instance = crc8.New(poly, init, xorout)
+instance.Checksum(data) // 0xCB
 ```
